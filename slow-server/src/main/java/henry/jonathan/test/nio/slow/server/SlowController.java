@@ -11,7 +11,7 @@ public class SlowController {
   @GetMapping
   public String slowIO(@RequestParam int id) {
     try {
-      log.info("#slowIO processing request id {}, sleep for 5 second", id);
+      log.info("#slowIO processing request id {}, sleep for 10 second", id);
       Thread.sleep(10000);
       log.info("#slowIO finished processing request id {}", id);
     } catch (Exception ex) {

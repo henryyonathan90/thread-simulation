@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Scheduler;
 import reactor.core.scheduler.Schedulers;
 
 @Service
@@ -17,10 +18,13 @@ public class CallerServiceImpl implements CallerService {
   @Autowired
   private SlowAppFeignClient feignClient;
 
+  @Autowired
+  private Scheduler schedulers;
+
   @Override
   public Mono<Boolean> testWebClient(int id) {
     return Mono.just("")
-        .subscribeOn(Schedulers.elastic())
+        .subscribeOn(schedulers)
         .map(s -> {
           log.info("#testWebClient start calling slow app for id {}", id);
           return s;
@@ -28,16 +32,18 @@ public class CallerServiceImpl implements CallerService {
         .flatMap(s -> slowServiceWebClient.get()
             .uri("api/slow/io?id=" + id)
             .exchange()
-            .map(clientResponse -> {
+            .flatMap(clientResponse -> clientResponse.bodyToMono(String.class)
+                .subscribeOn(schedulers))
+            .map(bodyString -> {
               log.info("#testWebClient finished calling slow app for id {}", id);
-              return clientResponse.statusCode().value();
+              return bodyString;
             })
             .map(integer -> Boolean.TRUE));
   }
 
   @Override
   public Mono<Boolean> testFeignClient(int id) {
-    return Mono.just("").subscribeOn(Schedulers.elastic()).flatMap(s -> {
+    return Mono.just("").subscribeOn(schedulers).flatMap(s -> {
       log.info("#testFeignClient start calling slow app for id {}", id);
       String result = feignClient.testSlowIO(id);
       log.info("#testFeignClient finished calling slow app for id {}", id);
