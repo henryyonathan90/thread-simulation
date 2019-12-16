@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.scheduler.Scheduler;
+import reactor.core.scheduler.Schedulers;
 
 @Configuration
 public class BeanConfig {
@@ -17,5 +19,10 @@ public class BeanConfig {
         .defaultHeader(HttpHeaders.ACCEPT, "application/json")
         .build();
     return webClient;
+  }
+
+  @Bean
+  public Scheduler scheduler() {
+    return Schedulers.newParallel("testScheduler", 10);
   }
 }
