@@ -27,19 +27,31 @@ public class TestController {
 
     @GetMapping("mono")
     public Mono<Integer> mono() {
-        return Mono.just(0).publishOn(Schedulers.parallel()).map(n -> {
-            log.info("First map");
-            return n + 1;
-        }).map(n -> {
-            log.info("Second map");
-            return n + 2;
-        });
+        return Mono.just(0)
+                .publishOn(Schedulers.elastic())
+                .map(n -> {
+                    log.info("First map");
+                    return n + 1;
+                }).map(n -> {
+                    log.info("Second map");
+                    return n + 2;
+                });
     }
 
     @GetMapping("flux")
-    public Mono<Long> flux() {
+    public Mono<String> flux() {
         return Flux.range(0, 100)
-                .parallel(2)
+                .publishOn(Schedulers.elastic())
+                .map(n -> {
+                    log.info("Log from " + n);
+                    return n;
+                }).then(Mono.just("Success"));
+    }
+
+    @GetMapping("parallelflux")
+    public Mono<Long> parallelflux() {
+        return Flux.range(0, 100)
+                .parallel(4)
                 .runOn(Schedulers.parallel())
                 .map(n -> {
                     log.info("Log from " + n);
