@@ -1,4 +1,4 @@
-package henry.jonathan.test.nio.caller.service;
+package henry.jonathan.test.nio.reactive.server.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,11 +6,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
-import reactor.core.scheduler.Schedulers;
 
 @Service
 @Slf4j
-public class CallerServiceImpl implements CallerService {
+public class WebclientVsFeignclientServiceImpl implements WebclientVsFeignclientService {
 
   @Autowired
   private WebClient slowServiceWebClient;

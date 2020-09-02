@@ -1,6 +1,6 @@
-package henry.jonathan.test.nio.caller.controller;
+package henry.jonathan.test.nio.reactive.server.controller;
 
-import henry.jonathan.test.nio.caller.service.CallerService;
+import henry.jonathan.test.nio.reactive.server.service.WebclientVsFeignclientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,19 +10,19 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/api/test/")
-public class CallerController {
+public class WebclientVsFeignclientController {
 
   @Autowired
-  private CallerService callerService;
+  private WebclientVsFeignclientService webclientVsFeignclientService;
 
   @GetMapping("webclient")
   public Mono<Boolean> webclient(@RequestParam int id) {
-    return callerService.testWebClient(id);
+    return webclientVsFeignclientService.testWebClient(id);
   }
 
   @GetMapping("feignclient")
   public Mono<Boolean> feignclient(@RequestParam int id) {
-    return callerService.testFeignClient(id);
+    return webclientVsFeignclientService.testFeignClient(id);
   }
 
 }

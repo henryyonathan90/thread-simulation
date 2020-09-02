@@ -1,4 +1,4 @@
-package henry.jonathan.test.nio.caller.config;
+package henry.jonathan.test.nio.reactive.server.config;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.cloud.openfeign.FeignClientBuilder;

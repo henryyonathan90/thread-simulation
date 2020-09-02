@@ -1,8 +1,8 @@
-package henry.jonathan.test.nio.caller.service;
+package henry.jonathan.test.nio.reactive.server.service;
 
 import reactor.core.publisher.Mono;
 
-public interface CallerService {
+public interface WebclientVsFeignclientService {
 
   Mono<Boolean> testWebClient(int n);
 

@@ -1,6 +1,6 @@
-package henry.jonathan.test.nio.caller.controller;
+package henry.jonathan.test.nio.reactive.server.controller;
 
-import henry.jonathan.test.nio.caller.service.CallerService;
+import henry.jonathan.test.nio.reactive.server.service.WebclientVsFeignclientService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +15,7 @@ import reactor.core.scheduler.Scheduler;
 public class OtherController {
 
   @Autowired
-  private CallerService callerService;
+  private WebclientVsFeignclientService webclientVsFeignclientService;
 
   @Autowired
   private Scheduler schedulers;

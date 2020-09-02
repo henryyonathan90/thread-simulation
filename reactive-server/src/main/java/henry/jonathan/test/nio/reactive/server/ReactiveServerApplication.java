@@ -1,4 +1,4 @@
-package henry.jonathan.test.nio.caller;
+package henry.jonathan.test.nio.reactive.server;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -6,8 +6,8 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
 @EnableFeignClients
-public class CallerApplication {
+public class ReactiveServerApplication {
   public static void main(String[] args) {
-    SpringApplication.run(CallerApplication.class, args);
+    SpringApplication.run(ReactiveServerApplication.class, args);
   }
 }
