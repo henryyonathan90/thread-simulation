@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("/api/test/")
+@RequestMapping("/api/vs/")
 public class WebclientVsFeignclientController {
 
   @Autowired
