@@ -1,0 +1,5 @@
+rootProject.name = 'thread-simulation'
+include 'reactive-service'
+include 'slow-service'
+include 'deferredresult-service'
+
