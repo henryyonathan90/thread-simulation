@@ -8,6 +8,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
 
+import java.util.UUID;
+
 @Service
 @Slf4j
 public class WebclientVsFeignclientServiceImpl implements WebclientVsFeignclientService {
@@ -19,33 +21,50 @@ public class WebclientVsFeignclientServiceImpl implements WebclientVsFeignclient
     private SlowAppFeignClient feignClient;
 
     @Autowired
-    private Scheduler schedulers;
+    private Scheduler scheduler1;
+    @Autowired
+    private Scheduler scheduler2;
+    @Autowired
+    private Scheduler scheduler3;
 
     @Override
-    public Mono<Boolean> testWebClient(int id) {
-        return Mono.just("")
-                .subscribeOn(schedulers)
-                .map(s -> {
-                    log.info("#testWebClient start calling slow app for id {}", id);
-                    return s;
-                })
-                .flatMap(s -> slowServiceWebClient.get()
-                        .uri("api/slow/io?id=" + id)
-                        .exchangeToMono(clientResponse -> clientResponse.releaseBody().subscribeOn(schedulers))
-                        .map(voidBody -> {
-                            log.info("#testWebClient finished calling slow app for id {}", id);
-                            return Boolean.TRUE;
-                        }));
+    public Mono<String> testWebClient() {
+        return Mono.fromCallable(this::generateRequestId).subscribeOn(scheduler1)
+                .publishOn(scheduler2).flatMap(this::nonBlockingIOCall)
+                .publishOn(scheduler3).map(this::loggingResponse);
     }
 
     @Override
-    public Mono<Boolean> testFeignClient(int id) {
-        return Mono.just("").subscribeOn(schedulers).flatMap(s -> {
-            log.info("#testFeignClient start calling slow app for id {}", id);
-            String result = feignClient.testSlowIO(id);
-            log.info("#testFeignClient finished calling slow app for id {}", id);
-            return Mono.just(result);
-        }).map(string -> Boolean.TRUE);
+    public Mono<String> testFeignClient() {
+        return Mono.fromCallable(this::generateRequestId).subscribeOn(scheduler1)
+                .publishOn(scheduler2).map(this::blockingIOCall)
+                .publishOn(scheduler3).map(this::loggingResponse);
     }
 
+    private String generateRequestId() {
+        log.info("Generating requestId");
+        String uuid = UUID.randomUUID().toString();
+        log.info("Generated requestId: {}", uuid);
+        return uuid;
+    }
+
+    private Mono<String> nonBlockingIOCall(String requestId) {
+        log.info("Running nonBlockingIOCall for requestId {}", requestId);
+
+        return slowServiceWebClient
+                .get()
+                .uri("api/slow/io?requestId=" + requestId)
+                .exchangeToMono(clientResponse -> clientResponse.bodyToMono(String.class));
+    }
+
+    private String blockingIOCall(String requestId) {
+        log.info("Running blockingIOCall for requestId {}", requestId);
+        return feignClient.testSlowIO(requestId);
+    }
+
+    private String loggingResponse(String response) {
+        log.info("Logging response: {}", response);
+
+        return "success";
+    }
 }

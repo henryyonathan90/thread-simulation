@@ -9,20 +9,20 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("/api/vs/")
+@RequestMapping("/api/")
 public class WebclientVsFeignclientController {
 
     @Autowired
     private WebclientVsFeignclientService webclientVsFeignclientService;
 
     @GetMapping("webclient")
-    public Mono<Boolean> webclient(@RequestParam int id) {
-        return webclientVsFeignclientService.testWebClient(id);
+    public Mono<String> webclient() {
+        return webclientVsFeignclientService.testWebClient();
     }
 
     @GetMapping("feignclient")
-    public Mono<Boolean> feignclient(@RequestParam int id) {
-        return webclientVsFeignclientService.testFeignClient(id);
+    public Mono<String> feignclient() {
+        return webclientVsFeignclientService.testFeignClient();
     }
 
 }

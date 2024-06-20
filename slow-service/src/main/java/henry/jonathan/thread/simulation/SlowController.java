@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class SlowController {
 
-    @GetMapping
+    @GetMapping(produces = "application/json")
     public String slowIO(@RequestParam String requestId) {
         try {
             log.info("#slowIO processing request id {}, sleep for few second", requestId);

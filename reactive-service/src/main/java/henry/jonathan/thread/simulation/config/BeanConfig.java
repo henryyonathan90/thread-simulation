@@ -16,16 +16,24 @@ public class BeanConfig {
 
     @Bean
     public WebClient slowServiceWebClient() {
-        WebClient webClient = WebClient.builder()
+        return WebClient.builder()
                 .baseUrl("http://localhost:8081/")
-                .defaultHeader(HttpHeaders.ACCEPT, "application/json")
                 .build();
-        return webClient;
     }
 
     @Bean
-    public Scheduler scheduler() {
-        return Schedulers.newParallel("testScheduler", 10);
+    public Scheduler scheduler1() {
+        return Schedulers.newParallel("testScheduler1", 1);
+    }
+
+    @Bean
+    public Scheduler scheduler2() {
+        return Schedulers.newBoundedElastic(1, 10000, "testScheduler2");
+    }
+
+    @Bean
+    public Scheduler scheduler3() {
+        return Schedulers.newBoundedElastic(1, 10000, "testScheduler3");
     }
 
     @Bean

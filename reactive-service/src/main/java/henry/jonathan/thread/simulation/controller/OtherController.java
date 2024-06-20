@@ -10,7 +10,7 @@ import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
 
 @RestController
-@RequestMapping("/api/other")
+@RequestMapping("/api/")
 @Slf4j
 public class OtherController {
 
@@ -18,12 +18,12 @@ public class OtherController {
     private WebclientVsFeignclientService webclientVsFeignclientService;
 
     @Autowired
-    private Scheduler schedulers;
+    private Scheduler scheduler2;
 
-    @GetMapping
+    @GetMapping("other")
     public Mono<String> get() {
         log.info("Process other api");
-        return Mono.just("success").subscribeOn(schedulers);
+        return Mono.just("success").subscribeOn(scheduler2);
     }
 
 }

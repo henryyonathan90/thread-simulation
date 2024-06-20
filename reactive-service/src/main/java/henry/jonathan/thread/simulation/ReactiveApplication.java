@@ -6,8 +6,8 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
 @EnableFeignClients
-public class ReactiveServerApplication {
+public class ReactiveApplication {
     public static void main(String[] args) {
-        SpringApplication.run(ReactiveServerApplication.class, args);
+        SpringApplication.run(ReactiveApplication.class, args);
     }
 }

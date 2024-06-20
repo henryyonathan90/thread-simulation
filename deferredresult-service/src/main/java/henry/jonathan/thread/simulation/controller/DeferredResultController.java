@@ -22,20 +22,19 @@ public class DeferredResultController {
 
     @GetMapping(value = "deferredresult", consumes = "application/json")
     public DeferredResult<String> deferredResult() {
-        String requestId = UUID.randomUUID().toString();
-        log.info("Incoming request with id {}", requestId);
+        log.info("Start processing a request");
 
         DeferredResult<String> output = new DeferredResult<>(10000L);
 
         CompletableFuture.runAsync(() -> {
             try {
-                output.setResult(genericService.doSomething(requestId));
+                output.setResult(genericService.doSomething());
             } catch (ExecutionException | InterruptedException e) {
                 throw new RuntimeException(e);
             }
         });
 
-        log.info("Returning deferred result for request with id {}", requestId);
+        log.info("Returning a deferred result for the request");
         return output;
     }
 

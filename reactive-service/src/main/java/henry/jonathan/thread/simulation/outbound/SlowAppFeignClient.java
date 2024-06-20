@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface SlowAppFeignClient {
 
     @RequestMapping(method = RequestMethod.GET, value = "api/slow/io")
-    String testSlowIO(@RequestParam int id);
+    String testSlowIO(@RequestParam String requestId);
 
 }

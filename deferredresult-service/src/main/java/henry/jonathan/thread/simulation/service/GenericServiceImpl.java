@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
 import java.util.concurrent.*;
 
 @Service
@@ -22,39 +23,29 @@ public class GenericServiceImpl implements GenericService {
     private ExecutorService executorService3;
 
     @Override
-    public String doSomething(String requestId) throws ExecutionException, InterruptedException {
-        log.info("Starting async request process for requestId {}", requestId);
+    public String doSomething() throws ExecutionException, InterruptedException {
+        log.info("Starting async request process");
 
-        return CompletableFuture.supplyAsync(() -> process1(requestId), executorService1)
-                .thenApplyAsync(s -> process2(requestId), executorService2)
-                .thenApplyAsync(s -> process3(requestId), executorService3)
+        return CompletableFuture.supplyAsync(this::generateRequestId, executorService1)
+                .thenApplyAsync(this::callDownstream, executorService2)
+                .thenApplyAsync(this::loggingResponse, executorService3)
                 .get();
     }
 
-    private String process1(String requestId) {
-        log.info("Starting process 1 for requestId {}", requestId);
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
-        return "true";
+    private String generateRequestId() {
+        log.info("Generating requestId");
+        String uuid = UUID.randomUUID().toString();
+        log.info("Generated requestId: {}", uuid);
+        return uuid;
     }
 
-    private String process2(String requestId) {
-        log.info("Starting process 2 for requestId {}", requestId);
+    private String callDownstream(String requestId) {
+        log.info("Calling downstream for requestId {}", requestId);
         return feignClient.testSlowIO(requestId);
     }
 
-    private String process3(String requestId) {
-        log.info("Starting process 3 for requestId {}", requestId);
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
-        return "true";
+    private String loggingResponse(String response) {
+        log.info("Logging response: {}", response);
+        return response;
     }
 }
