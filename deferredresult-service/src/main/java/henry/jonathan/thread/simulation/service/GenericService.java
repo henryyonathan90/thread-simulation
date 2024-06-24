@@ -4,6 +4,7 @@ import java.util.concurrent.ExecutionException;
 
 public interface GenericService {
 
-    String doSomething() throws ExecutionException, InterruptedException;
+    String doSomethingMultiThreadpools() throws ExecutionException, InterruptedException;
 
+    String doSomething() throws ExecutionException, InterruptedException;
 }

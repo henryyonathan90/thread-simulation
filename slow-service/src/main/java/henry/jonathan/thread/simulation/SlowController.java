@@ -15,7 +15,7 @@ public class SlowController {
     public String slowIO(@RequestParam String requestId) {
         try {
             log.info("#slowIO processing request id {}, sleep for few second", requestId);
-            Thread.sleep(3000);
+            Thread.sleep(5000);
             log.info("#slowIO finished processing request id {}", requestId);
         } catch (Exception ex) {
             log.error(null, ex);

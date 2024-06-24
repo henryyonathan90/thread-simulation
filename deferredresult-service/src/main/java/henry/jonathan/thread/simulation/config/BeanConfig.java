@@ -10,7 +10,7 @@ public class BeanConfig {
 
     @Bean
     public ExecutorService executorService1() {
-        return Executors.newFixedThreadPool(32);
+        return Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
     }
 
     @Bean
@@ -20,6 +20,11 @@ public class BeanConfig {
 
     @Bean
     public ExecutorService executorService3() {
-        return Executors.newFixedThreadPool(32);
+        return Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+    }
+
+    @Bean
+    public ExecutorService executorServiceCommon() {
+        return Executors.newVirtualThreadPerTaskExecutor();
     }
 }
