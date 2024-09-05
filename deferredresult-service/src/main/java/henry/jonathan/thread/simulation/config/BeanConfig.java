@@ -15,7 +15,8 @@ public class BeanConfig {
 
     @Bean
     public ExecutorService executorService2() {
-        return Executors.newVirtualThreadPerTaskExecutor();
+//        return Executors.newThreadPerTaskExecutor(Thread.ofPlatform().name("IO-pool-", 0L).factory());
+        return Executors.newThreadPerTaskExecutor(Thread.ofVirtual().name("IO-pool-", 0L).factory());
     }
 
     @Bean
@@ -25,6 +26,7 @@ public class BeanConfig {
 
     @Bean
     public ExecutorService executorServiceCommon() {
-        return Executors.newVirtualThreadPerTaskExecutor();
+//        return Executors.newThreadPerTaskExecutor(Thread.ofPlatform().name("common-pool-", 0L).factory());
+        return Executors.newThreadPerTaskExecutor(Thread.ofVirtual().name("common-pool-", 0L).factory());
     }
 }
